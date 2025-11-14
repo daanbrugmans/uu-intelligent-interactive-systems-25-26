@@ -1,9 +1,14 @@
 .vscode
 weights
+
 assignments/lab_1/*.jpg
 assignments/lab_1/*.png
 assignments/lab_1/*.zip
 assignments/lab_1/*.mp4
+assignments/lab_1/events.*
+assignments/lab_1/*.txt
+assignments/lab_1/facial_emotion_detection_dataset
+
 assignments/Assignment1ISS/dataset
 assignments/Assignment1ISS/DiffusionFER
 assignments/Assignment1ISS/weights
