@@ -1,5 +1,9 @@
 .vscode
 weights
+assignments/lab_1/*.jpg
+assignments/lab_1/*.png
+assignments/lab_1/*.zip
+assignments/lab_1/*.mp4
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
