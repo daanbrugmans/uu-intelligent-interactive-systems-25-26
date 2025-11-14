@@ -4,6 +4,9 @@ assignments/lab_1/*.jpg
 assignments/lab_1/*.png
 assignments/lab_1/*.zip
 assignments/lab_1/*.mp4
+assignments/Assignment1ISS/dataset
+assignments/Assignment1ISS/DiffusionFER
+assignments/Assignment1ISS/weights
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
