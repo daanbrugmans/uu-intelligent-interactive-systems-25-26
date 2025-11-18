@@ -13,6 +13,10 @@ assignments/Assignment1ISS/dataset
 assignments/Assignment1ISS/DiffusionFER
 assignments/Assignment1ISS/DiffusionFER.zip
 assignments/Assignment1ISS/weights
+assignments/Assignment1ISS/no_face_detected.png
+assignments/Assignment1ISS/log.txt
+
+events.out.*
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
