@@ -7,7 +7,7 @@ import torch
 
 def override_preprocess_image(
     self, image_path: tuple[str, np.ndarray], resize: float = 1.0
-) -> tuple[torch.tensor, cv2.MatLike]:
+):
     """Taken from the IIS Lab 1 notebook.
 
     Acts as an override for OpenFace's FaceDetector so that it can directly accept a NumPy array as an input.
