@@ -18,6 +18,7 @@ assignments/Assignment1ISS/log.txt
 assignments/Assignment1ISS/emotion_classifier_datasets/*
 
 events.out.*
+trainer_output
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
