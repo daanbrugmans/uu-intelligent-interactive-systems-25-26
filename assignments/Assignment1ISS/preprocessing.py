@@ -4,34 +4,41 @@ import numpy as np
 from openface.face_detection import FaceDetector
 from openface.landmark_detection import LandmarkDetector
 
+import runtime
+
 
 # dataset = load_dataset("imagefolder", data_dir = "./DiffusionFER/DiffusionEmotion_S/Cropped")["train"]
 # labels_df = pd.read_csv("./DiffusionFER/DiffusionEmotion_S/dataset_sheet.csv")
 
+device = runtime.get_cuda_device()
+face_detector_model = FaceDetector("./weights/Alignment_RetinaFace.pth", device=device)
+landmark_detector_model = LandmarkDetector(
+    "./weights/Landmark_98.pkl", device=device, device_ids=[0]
+)
 
-device = "cuda"  # or "cpu"
-
-det = FaceDetector("./weights/Alignment_RetinaFace.pth", device=device)
-lmk = LandmarkDetector("./weights/Landmark_98.pkl", device=device, device_ids=[0])
 
 # helper function to get landmarks in order to train a landmark->emotion model
 def detect_face_and_get_landmarks(image):
     # transform PIL image to BGR numpy array
     img_bgr = cv2.cvtColor(np.array(image.convert("RGB")), cv2.COLOR_RGB2BGR)
 
-    _, dets = det.get_face(img_bgr)
+    _, dets = face_detector_model.get_face(img_bgr)
     if dets is None or len(dets) == 0:
         image.save("no_face_detected.png")
         return None
 
-    pts = lmk.detect_landmarks(img_bgr, [dets[0]])[0].astype(np.float32)  # (98,2)
+    pts = landmark_detector_model.detect_landmarks(img_bgr, [dets[0]])[0].astype(
+        np.float32
+    )  # (98,2)
     return pts
+
 
 def get_label_from_filename(example):
     import re
+
     filename = os.path.basename(example["image"].filename)
     # match the last number before the file extension
-    match = re.search(r'_(\d+)\.', filename)
+    match = re.search(r"_(\d+)\.", filename)
     if match:
         label = int(match.group(1))
         example["label"] = label
@@ -39,6 +46,7 @@ def get_label_from_filename(example):
         # mark invalid or skip
         example["label"] = -1
     return example
+
 
 def data_preprocessing(dataset):
     dataset = dataset.map(get_label_from_filename)

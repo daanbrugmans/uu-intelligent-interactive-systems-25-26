@@ -15,6 +15,7 @@ assignments/Assignment1ISS/DiffusionFER.zip
 assignments/Assignment1ISS/weights
 assignments/Assignment1ISS/no_face_detected.png
 assignments/Assignment1ISS/log.txt
+assignments/Assignment1ISS/emotion_classifier_datasets/*
 
 events.out.*
 
