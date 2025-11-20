@@ -1,15 +1,11 @@
-
-import os
 from abc import ABC
 from pathlib import Path
 
-import pandas as pd
 import torch
 import transformers
 import datasets
 import peft
 from tqdm import tqdm
-from sklearn.metrics import accuracy_score
 
 import runtime
 
@@ -46,7 +42,7 @@ class FinetunedViT(DeepEmotionClassifier):
                 num_labels=7,
                 ignore_mismatched_sizes=True,
             ),
-            path_to_finetuned_model
+            path_to_finetuned_model,
         )
 
 
@@ -101,7 +97,7 @@ def train_vit_for_emotion_classification(
         lora_vit,
         args=training_args,
         train_dataset=preprocessed_train,
-        eval_dataset=preprocessed_val
+        eval_dataset=preprocessed_val,
     )
 
     trainer.train()
@@ -110,38 +106,43 @@ def train_vit_for_emotion_classification(
     path_to_finetuned_model = str(Path(project_root, "finetuned_vit"))
 
     lora_vit.save_pretrained(path_to_finetuned_model)
-    
+
 
 def dima806_label_to_fer_label(dima806_label: int) -> int:
     if dima806_label == 0:
-        return 5 # Sad
+        return 5  # Sad
     elif dima806_label == 1:
-        return 1 # Disgust
+        return 1  # Disgust
     elif dima806_label == 2:
-        return 0 # Anger
+        return 0  # Anger
     elif dima806_label == 3:
-        return 4 # Neutral
+        return 4  # Neutral
     elif dima806_label == 4:
-        return 2 # Fear
+        return 2  # Fear
     elif dima806_label == 5:
-        return 6 # Surprise
+        return 6  # Surprise
     elif dima806_label == 6:
-        return 3 # Happy
-    
-def get_predictions(vit_model, dataset: datasets.Dataset, use_dima806_labels: bool = False) -> list:   
+        return 3  # Happy
+
+
+def get_predictions(
+    vit_model, dataset: datasets.Dataset, use_dima806_labels: bool = False
+) -> list:
     predictions = []
-    
-    for row in tqdm(dataset):        
-        pixel_values = vit_model.processor(row["image"], return_tensors="pt").to(device)
+
+    for row in tqdm(dataset):
+        pixel_values = vit_model.processor(row["image"], return_tensors="pt").to(
+            runtime.get_cuda_device()
+        )
         model_output = vit_model.model(**pixel_values)
         emissions = model_output.logits
         prediction = emissions.argmax(-1).item()
-        
+
         if use_dima806_labels:
             prediction = dima806_label_to_fer_label(prediction)
-        
+
         predictions.append(prediction)
-        
+
     return predictions
 
 
